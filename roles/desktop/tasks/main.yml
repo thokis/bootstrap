@@ -5,6 +5,16 @@
       state: present
   become: true
 
+# The amdgpu backlight sysfs node is root:video g+w, so brightnessctl can only
+# set brightness for members of the video group. Without this the dwm
+# XF86MonBrightness keys fire but silently fail on "Permission denied".
+- name: Grant the session user backlight write access via the video group
+  ansible.builtin.user:
+      name: "{{ ansible_user_id }}"
+      groups: video
+      append: true
+  become: true
+
 - name: Ensure the local bin directory exists
   ansible.builtin.file:
       path: "{{ desktop_local_bin }}"
