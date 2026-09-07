@@ -6,16 +6,6 @@
       update_cache: true
   become: true
 
-- name: Gather service facts
-  ansible.builtin.service_facts:
-
-- name: Stop the display manager
-  ansible.builtin.systemd_service:
-      name: "{{ system_display_manager }}"
-      state: stopped
-  become: true
-  when: system_display_manager in ansible_facts.services
-
 # What `systemctl set-default {{ system_boot_target }}` does, as an idempotent
 # symlink: boot to a text console so the display manager never starts.
 - name: Boot to the multi-user target
@@ -28,7 +18,7 @@
 - name: Set the console keyboard layout
   ansible.builtin.lineinfile:
       path: /etc/default/keyboard
-      regexp: '^XKBLAYOUT='
+      regexp: "^XKBLAYOUT="
       line: 'XKBLAYOUT="{{ keyboard_layout }}"'
   become: true
   notify: Update initramfs
@@ -38,7 +28,7 @@
 - name: Include the console keymap in the initramfs
   ansible.builtin.lineinfile:
       path: /etc/initramfs-tools/initramfs.conf
-      regexp: '^KEYMAP='
+      regexp: "^KEYMAP="
       line: KEYMAP=y
   become: true
   notify: Update initramfs
