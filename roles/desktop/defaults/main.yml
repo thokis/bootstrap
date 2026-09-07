@@ -21,7 +21,8 @@ desktop_packages:
     - xss-lock # lock on suspend / lock-session
     - xprintidle # idle-manager
     - brightnessctl # idle-manager backlight + dwm brightness keys
-    - pamixer # dwm volume keys (XF86Audio*)
+    - pamixer # dwm volume keys (XF86AudioRaise/Lower/Mute)
+    - playerctl # dwm media transport keys (XF86AudioPlay/Pause/Next/Prev) via MPRIS
     - iw # netstatus wifi essid
     - x11-xserver-utils # xrdb, xsetroot
 

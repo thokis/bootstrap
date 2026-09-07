@@ -70,6 +70,9 @@ static const char *downvol[]  = { "pamixer", "-d", "5", NULL };
 static const char *mutevol[]  = { "pamixer", "-t", NULL };
 static const char *upbri[]    = { "brightnessctl", "set", "5%+", NULL };
 static const char *downbri[]  = { "brightnessctl", "set", "5%-", NULL };
+static const char *playpause[] = { "playerctl", "play-pause", NULL };
+static const char *nexttrack[] = { "playerctl", "next", NULL };
+static const char *prevtrack[] = { "playerctl", "previous", NULL };
 static const char *logoutcmd[] = { "pkill", "-15", "xinit", NULL };
 
 static const Key keys[] = {
@@ -80,6 +83,10 @@ static const Key keys[] = {
 	{ 0,              XF86XK_AudioMute,         spawn,          {.v = mutevol } },
 	{ 0,              XF86XK_MonBrightnessUp,   spawn,          {.v = upbri } },
 	{ 0,              XF86XK_MonBrightnessDown, spawn,          {.v = downbri } },
+	{ 0,              XF86XK_AudioPlay,         spawn,          {.v = playpause } },
+	{ 0,              XF86XK_AudioPause,        spawn,          {.v = playpause } },
+	{ 0,              XF86XK_AudioNext,         spawn,          {.v = nexttrack } },
+	{ 0,              XF86XK_AudioPrev,         spawn,          {.v = prevtrack } },
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
 	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
