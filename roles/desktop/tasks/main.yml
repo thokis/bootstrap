@@ -89,9 +89,10 @@
       creates: "{{ desktop_font_dir }}/CaskaydiaCoveNerdFont-Regular.ttf"
   notify: Rebuild font cache
 
-# Auto-unlock the login keyring with the tty login password, so gcr-ssh-agent
-# (ssh keys), NetworkManager (wifi secrets) and the Secret Service work without
-# a separate unlock prompt. The dwm session logs in on a tty, not a display
+# Auto-unlock the login keyring with the tty login password, so NetworkManager
+# (wifi secrets) and the Secret Service (Chrome et al.) work without a separate
+# unlock prompt. SSH keys do NOT come from the keyring — we use a plain OpenSSH
+# agent (see xinitrc.j2). The dwm session logs in on a tty, not a display
 # manager, so the anchor is /etc/pam.d/login.
 - name: Unlock the gnome-keyring at tty login (auth)
   ansible.builtin.lineinfile:
@@ -108,3 +109,26 @@
       line: "session    optional   pam_gnome_keyring.so auto_start"
       insertafter: "^@include common-session"
   become: true
+
+# Use the plain OpenSSH agent for ssh, not gcr-ssh-agent: the gcr agent needs a
+# prompter to unlock/confirm keys, which isn't running under dwm, so it refuses
+# to sign ("agent refused operation"). Disable its socket so it can't reclaim
+# $SSH_AUTH_SOCK, and let ssh load keys into the agent on first use.
+- name: Disable the gcr ssh-agent socket (we use the plain OpenSSH agent)
+  ansible.builtin.systemd_service:
+      name: gcr-ssh-agent.socket
+      scope: user
+      enabled: false
+      state: stopped
+  failed_when: false
+
+- name: Load ssh keys into the agent on first use
+  ansible.builtin.blockinfile:
+      path: "{{ ansible_env.HOME }}/.ssh/config"
+      create: true
+      mode: "0600"
+      insertbefore: BOF
+      marker: "# {mark} ANSIBLE MANAGED: ssh-agent"
+      block: |
+          Host *
+              AddKeysToAgent yes

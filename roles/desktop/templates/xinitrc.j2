@@ -9,10 +9,13 @@ export XDG_CURRENT_DESKTOP=GTK
 # Use the systemd --user session bus (already has gnome-keyring, xdg-desktop-portal, etc.)
 # instead of an isolated dbus-run-session bus, so those services resolve instantly.
 export DBUS_SESSION_BUS_ADDRESS="unix:path=${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/bus"
-# SSH agent is gcr-ssh-agent (gnome-keyring no longer runs its own ssh component),
-# whose socket lives at gcr/ssh — NOT the legacy keyring/ssh path.
-systemctl --user start gcr-ssh-agent.socket 2>/dev/null
-export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/gcr/ssh"
+# SSH agent: plain OpenSSH agent via the shipped systemd --user unit
+# (ssh-agent.service, socket $XDG_RUNTIME_DIR/openssh_agent). We deliberately do
+# NOT use gcr-ssh-agent for ssh: it needs a gcr prompter to unlock/confirm keys,
+# which isn't running under dwm, so it refuses to sign ("agent refused operation").
+# gnome-keyring still runs for the secrets/pkcs11 components (Chrome et al.).
+systemctl --user start ssh-agent.service 2>/dev/null
+export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/openssh_agent"
 
 # Make the X session env visible to dbus-activated and systemd --user services.
 dbus-update-activation-environment DISPLAY XAUTHORITY XDG_CURRENT_DESKTOP SSH_AUTH_SOCK 2>/dev/null

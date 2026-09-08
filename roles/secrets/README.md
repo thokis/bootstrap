@@ -1,9 +1,10 @@
 # secrets
 
 Fetches the GitHub SSH private key from **OpenBao** (`https://bao.helios9.org`,
-KV v2 at `secret/ssh/github`) and installs it to `~/.ssh/id_ed25519` (`0600`), so
-the later roles can clone the `git@github.com` forks. Runs early (right after
-`system`), before any clone.
+KV v2 at `secret/ssh/github`) and installs it to `~/.ssh/github` (`0600`), plus a
+`github.com` `IdentityFile` entry in `~/.ssh/config` so ssh uses that non-default
+key name for the `git@github.com` forks the later roles clone. Runs early (right
+after `system`), before any clone.
 
 Auth is **AppRole**, read from the environment (`ANSIBLE_HASHI_VAULT_ADDR`,
 `ANSIBLE_HASHI_VAULT_AUTH_METHOD=approle`, `ANSIBLE_HASHI_VAULT_ROLE_ID`,
