@@ -1,21 +1,19 @@
 #!/bin/sh
 out=""
 
-# WiFi (U+F1EB)
 wifi=$(for w in /sys/class/net/*/wireless; do [ -e "$w" ] && { basename "$(dirname "$w")"; break; }; done)
 wip=$(ip -4 -o addr show dev "$wifi" 2>/dev/null | awk '{print $4}' | cut -d/ -f1)
 if [ -n "$wip" ]; then
 	ssid=$(iw dev "$wifi" link 2>/dev/null | awk '/SSID:/{print $2}')
 	printf -v _ 2>/dev/null  # test bash
-	out="   ${wip} (${ssid}) |"
+	out="   ${wip} (${ssid})"
 fi
 
-# Ethernet — first en* interface with an IPv4 address (U+F6FF)
 for dev in $(ls /sys/class/net/ | grep '^en'); do
 	eip=$(ip -4 -o addr show dev "$dev" 2>/dev/null | awk '{print $4}' | cut -d/ -f1)
 	if [ -n "$eip" ]; then
 		[ -n "$out" ] && out="${out} "
-		out="${out}   ${eip}"
+		out="${out} |   ${eip}"
 		break
 	fi
 done
