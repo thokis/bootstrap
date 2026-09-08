@@ -1,7 +1,7 @@
 [project]
-name = "workstation"
+name = "bootstrap"
 version = "0"
-description = "Personal Ubuntu/GNOME workstation as an Ansible playbook"
+description = "Personal Ubuntu dwm workstation as an Ansible playbook"
 requires-python = ">=3.11"
 # Runtime deps for the control node: ansible itself and hvac (for the
 # community.hashi_vault OpenBao lookup in the secrets role).

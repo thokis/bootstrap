@@ -1,5 +1,5 @@
 ---
-- name: Configure personal workstation
+- name: Bootstrap a personal machine
   hosts: all
   gather_facts: true
   roles:

@@ -2,7 +2,7 @@
 galaxy_info:
   role_name: neovim
   author: Thomas Kiss
-  description: nvim as the default text editor/viewer on Ubuntu GNOME
+  description: nvim as the default text editor/viewer on Ubuntu
   license: MIT
   min_ansible_version: "2.15"
   platforms:
