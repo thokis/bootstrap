@@ -74,10 +74,13 @@ static const char *playpause[] = { "playerctl", "play-pause", NULL };
 static const char *nexttrack[] = { "playerctl", "next", NULL };
 static const char *prevtrack[] = { "playerctl", "previous", NULL };
 static const char *logoutcmd[] = { "pkill", "-15", "xinit", NULL };
+/* toggle the keyboard layout between de and us */
+static const char *kbdtoggle[] = { "/bin/sh", "-c", "setxkbmap -query | grep -q '^layout: *de$' && setxkbmap us || setxkbmap de", NULL };
 
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY|ControlMask,           XK_l,      spawn,          {.v = lockcmd } },
+	{ MODKEY,                       XK_F12,    spawn,          {.v = kbdtoggle } },
 	{ 0,              XF86XK_AudioRaiseVolume,  spawn,          {.v = upvol } },
 	{ 0,              XF86XK_AudioLowerVolume,  spawn,          {.v = downvol } },
 	{ 0,              XF86XK_AudioMute,         spawn,          {.v = mutevol } },
