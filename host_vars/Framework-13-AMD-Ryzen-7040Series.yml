@@ -1,0 +1,3 @@
+---
+# German qwertz notebook keyboard; overrides the fleet default in group_vars/all.yml.
+keyboard_layout: de
