@@ -5,7 +5,7 @@ together. Run those first — this role assumes their binaries are installed.
 
 Deploys:
 - `~/.xinitrc` (templated: wallpaper via `desktop_wallpaper`) — starts feh,
-  slstatus, picom, idle-manager, nm-applet, xss-lock and runs dwm on the
+  slstatus, picom, idle-manager, xss-lock and runs dwm on the
   systemd `--user` bus (so gnome-keyring/portal/ssh-agent resolve instantly).
 - Dotfiles: `~/.Xresources`, `~/.config/picom.conf`,
   `~/.config/xdg-desktop-portal/portals.conf` (forces the GTK backend),

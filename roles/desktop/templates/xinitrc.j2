@@ -25,7 +25,10 @@ feh --no-fehbg --bg-fill '{{ desktop_wallpaper }}' &
 slstatus &
 picom --config "$HOME/.config/picom.conf" &
 idle-manager &
-nm-applet &
+# No nm-applet: dwm has no systray, so its only effect was acting as NM's secret
+# agent -- popping a GTK "enter wifi password" dialog whenever a handshake flaked
+# after resume. Wifi PSKs are system-stored (psk-flags=0); without an agent NM just
+# retries autoconnect. Use nmcli/nmtui for new networks.
 
 # --- screen locking (xsecurelock) ---
 # `lockscreen` snapshots+blurs the screen and sets all XSECURELOCK_* appearance
