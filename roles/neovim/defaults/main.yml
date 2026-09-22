@@ -2,11 +2,11 @@
 neovim_bin: /usr/local/bin/nvim
 neovim_repo: https://github.com/neovim/neovim.git
 neovim_version: stable
-neovim_src: "{{ ansible_env.HOME }}/.sources/neovim"
+neovim_src: "{{ ansible_facts.env.HOME }}/.sources/neovim"
 
 neovim_config_repo: https://github.com/thokis/kickstart.nvim.git
 neovim_config_version: master
-neovim_config_dir: "{{ ansible_env.HOME }}/.config/nvim"
+neovim_config_dir: "{{ ansible_facts.env.HOME }}/.config/nvim"
 
 neovim_packages:
   - build-essential   # neovim build

@@ -10,7 +10,7 @@
 # XF86MonBrightness keys fire but silently fail on "Permission denied".
 - name: Grant the session user backlight write access via the video group
   ansible.builtin.user:
-      name: "{{ ansible_user_id }}"
+      name: "{{ ansible_facts.user_id }}"
       groups: video
       append: true
   become: true
@@ -31,13 +31,13 @@
 - name: Deploy X resources
   ansible.builtin.copy:
       src: Xresources
-      dest: "{{ ansible_env.HOME }}/.Xresources"
+      dest: "{{ ansible_facts.env.HOME }}/.Xresources"
       mode: "0644"
 
 - name: Deploy the .xinitrc
   ansible.builtin.template:
       src: xinitrc.j2
-      dest: "{{ ansible_env.HOME }}/.xinitrc"
+      dest: "{{ ansible_facts.env.HOME }}/.xinitrc"
       mode: "0755"
 
 - name: Ensure config subdirectories exist
@@ -46,26 +46,26 @@
       state: directory
       mode: "0755"
   loop:
-      - "{{ ansible_env.HOME }}/.config"
-      - "{{ ansible_env.HOME }}/.config/xdg-desktop-portal"
-      - "{{ ansible_env.HOME }}/.icons/default"
+      - "{{ ansible_facts.env.HOME }}/.config"
+      - "{{ ansible_facts.env.HOME }}/.config/xdg-desktop-portal"
+      - "{{ ansible_facts.env.HOME }}/.icons/default"
 
 - name: Deploy the picom configuration
   ansible.builtin.copy:
       src: picom.conf
-      dest: "{{ ansible_env.HOME }}/.config/picom.conf"
+      dest: "{{ ansible_facts.env.HOME }}/.config/picom.conf"
       mode: "0644"
 
 - name: Force the GTK xdg-desktop-portal backend
   ansible.builtin.copy:
       src: portals.conf
-      dest: "{{ ansible_env.HOME }}/.config/xdg-desktop-portal/portals.conf"
+      dest: "{{ ansible_facts.env.HOME }}/.config/xdg-desktop-portal/portals.conf"
       mode: "0644"
 
 - name: Inherit the Adwaita cursor theme
   ansible.builtin.copy:
       src: icons-default-index.theme
-      dest: "{{ ansible_env.HOME }}/.icons/default/index.theme"
+      dest: "{{ ansible_facts.env.HOME }}/.icons/default/index.theme"
       mode: "0644"
 
 - name: Configure touchpad tap-to-click and natural scrolling
@@ -124,7 +124,7 @@
 
 - name: Load ssh keys into the agent on first use
   ansible.builtin.blockinfile:
-      path: "{{ ansible_env.HOME }}/.ssh/config"
+      path: "{{ ansible_facts.env.HOME }}/.ssh/config"
       create: true
       mode: "0600"
       insertbefore: BOF

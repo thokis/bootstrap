@@ -1,7 +1,7 @@
 ---
 # nvm release tag to install (https://github.com/nvm-sh/nvm/releases).
 nodejs_nvm_version: v0.40.1
-nodejs_nvm_dir: "{{ ansible_env.HOME }}/.nvm"
+nodejs_nvm_dir: "{{ ansible_facts.env.HOME }}/.nvm"
 
 # Node.js version nvm installs and aliases as default (kickstart/Mason tooling).
 nodejs_version: "lts/*"

@@ -2,7 +2,7 @@
 st_repo: https://git.suckless.org/st
 # Pinned upstream commit the vendored patch was generated against.
 st_version: 04ce0d643ed17793803e8516f4c9a5b13b93c400
-st_src: "{{ ansible_env.HOME }}/.sources/st"
+st_src: "{{ ansible_facts.env.HOME }}/.sources/st"
 st_bin: /usr/local/bin/st
 st_patch: scrollback-alpha.patch
 

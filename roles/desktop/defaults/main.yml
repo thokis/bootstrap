@@ -1,13 +1,13 @@
 ---
-desktop_local_bin: "{{ ansible_env.HOME }}/.local/bin"
+desktop_local_bin: "{{ ansible_facts.env.HOME }}/.local/bin"
 
 # Wallpaper feh restores in .xinitrc (provide the image yourself).
-desktop_wallpaper: "{{ ansible_env.HOME }}/Pictures/wallhaven-5y3pd8.png"
+desktop_wallpaper: "{{ ansible_facts.env.HOME }}/Pictures/wallhaven-5y3pd8.png"
 
 # CaskaydiaCove Nerd Font (st/dwm/dmenu primary font).
 desktop_font_version: v3.5.1
 desktop_font_url: "https://github.com/ryanoasis/nerd-fonts/releases/download/{{ desktop_font_version }}/CascadiaCode.zip"
-desktop_font_dir: "{{ ansible_env.HOME }}/.local/share/fonts/CascadiaCode"
+desktop_font_dir: "{{ ansible_facts.env.HOME }}/.local/share/fonts/CascadiaCode"
 
 # Runtime tools the session and its scripts call.
 desktop_packages:

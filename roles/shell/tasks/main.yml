@@ -16,13 +16,13 @@
 - name: Deploy .profile
   ansible.builtin.copy:
     src: profile
-    dest: "{{ ansible_env.HOME }}/.profile"
+    dest: "{{ ansible_facts.env.HOME }}/.profile"
     mode: "0644"
 
 - name: Deploy .bashrc
   ansible.builtin.copy:
     src: bashrc
-    dest: "{{ ansible_env.HOME }}/.bashrc"
+    dest: "{{ ansible_facts.env.HOME }}/.bashrc"
     mode: "0644"
 
 # Machine-local overrides + secrets live here, sourced by .bashrc. Never managed
@@ -30,6 +30,6 @@
 - name: Ensure ~/.bashrc.local exists
   ansible.builtin.copy:
     content: "# Machine-local shell config and secrets. Gitignored, not managed.\n"
-    dest: "{{ ansible_env.HOME }}/.bashrc.local"
+    dest: "{{ ansible_facts.env.HOME }}/.bashrc.local"
     mode: "0600"
     force: false

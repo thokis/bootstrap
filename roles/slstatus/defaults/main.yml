@@ -1,7 +1,7 @@
 ---
 slstatus_repo: https://git.suckless.org/slstatus
 slstatus_version: master
-slstatus_src: "{{ ansible_env.HOME }}/.sources/slstatus"
+slstatus_src: "{{ ansible_facts.env.HOME }}/.sources/slstatus"
 slstatus_bin: /usr/local/bin/slstatus
 
 slstatus_build_packages:

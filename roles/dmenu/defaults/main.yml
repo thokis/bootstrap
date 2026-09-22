@@ -1,7 +1,7 @@
 ---
 dmenu_repo: https://git.suckless.org/dmenu
 dmenu_version: master
-dmenu_src: "{{ ansible_env.HOME }}/.sources/dmenu"
+dmenu_src: "{{ ansible_facts.env.HOME }}/.sources/dmenu"
 dmenu_bin: /usr/local/bin/dmenu
 
 dmenu_build_packages:

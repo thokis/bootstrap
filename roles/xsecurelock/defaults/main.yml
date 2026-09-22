@@ -1,7 +1,7 @@
 ---
 xsecurelock_repo: https://github.com/google/xsecurelock.git
 xsecurelock_version: master
-xsecurelock_src: "{{ ansible_env.HOME }}/.sources/xsecurelock"
+xsecurelock_src: "{{ ansible_facts.env.HOME }}/.sources/xsecurelock"
 xsecurelock_bin: /usr/local/bin/xsecurelock
 xsecurelock_pam_service: common-auth
 

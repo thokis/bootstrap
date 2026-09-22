@@ -51,14 +51,14 @@
 # --- make st the default terminal ---
 - name: Ensure ~/.local/bin exists
   ansible.builtin.file:
-    path: "{{ ansible_env.HOME }}/.local/bin"
+    path: "{{ ansible_facts.env.HOME }}/.local/bin"
     state: directory
     mode: "0755"
 
 - name: Install the xdg-terminal-exec shim (-> st)
   ansible.builtin.copy:
     src: xdg-terminal-exec
-    dest: "{{ ansible_env.HOME }}/.local/bin/xdg-terminal-exec"
+    dest: "{{ ansible_facts.env.HOME }}/.local/bin/xdg-terminal-exec"
     mode: "0755"
 
 - name: Set st as the x-terminal-emulator alternative
