@@ -50,6 +50,17 @@
       - "{{ ansible_facts.env.HOME }}/.config/xdg-desktop-portal"
       - "{{ ansible_facts.env.HOME }}/.icons/default"
 
+- name: Set the default image viewer in mimeapps.list
+  community.general.ini_file:
+      path: "{{ ansible_facts.env.HOME }}/.config/mimeapps.list"
+      section: Default Applications
+      option: "{{ item }}"
+      value: "{{ desktop_image_viewer }}"
+      no_extra_spaces: true
+      create: true
+      mode: "0644"
+  loop: "{{ desktop_image_mimes }}"
+
 - name: Deploy the picom configuration
   ansible.builtin.copy:
       src: picom.conf

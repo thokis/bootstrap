@@ -15,6 +15,8 @@ Deploys:
 - Helper scripts to `~/.local/bin`: `lockscreen`, `idle-manager`, `netstatus`,
   `google-chrome` (scales Chrome to 0.9), `screenshot`.
 - CaskaydiaCove Nerd Font (`desktop_font_version`).
+- feh as default image viewer in `~/.config/mimeapps.list` (`desktop_image_viewer`
+  / `desktop_image_mimes`), so `xdg-open` and nnn's Enter open images in feh.
 
 `lockscreen` runs upstream xsecurelock (built by the `xsecurelock` role): plain
 black background + password prompt, no blurred backdrop.

@@ -14,7 +14,7 @@ desktop_packages:
     - unzip # extract the font archive
     - scrot # screenshot + lockscreen snapshot
     - imagemagick # lockscreen blur (convert)
-    - feh # wallpaper
+    - feh # wallpaper + default image viewer
     - picom # compositor
     - libpam-gnome-keyring # unlock keyring (ssh keys, NM/wifi secrets) at tty login
     - xss-lock # lock on suspend / lock-session
@@ -32,3 +32,16 @@ desktop_scripts:
     - netstatus
     - google-chrome
     - screenshot
+
+# Default image viewer in mimeapps.list (xdg-open, so nnn's Enter too).
+desktop_image_viewer: feh.desktop
+desktop_image_mimes:
+    - image/jpeg
+    - image/png
+    - image/gif
+    - image/tiff
+    - image/bmp
+    - image/webp
+    - image/x-icon
+    - image/x-xpixmap
+    - image/x-xbitmap
