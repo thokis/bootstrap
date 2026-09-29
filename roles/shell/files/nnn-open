@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# Runs the oh-my-bash `n` function (flags + NNN_* env) for desktop launches.
+exec bash -ic 'n "$@"' n "$@"

@@ -1,3 +1,4 @@
 ---
 shell_omb_repo: https://github.com/ohmybash/oh-my-bash.git
 shell_omb_dir: "{{ ansible_facts.env.HOME }}/.oh-my-bash"
+shell_local_bin: "{{ ansible_facts.env.HOME }}/.local/bin"

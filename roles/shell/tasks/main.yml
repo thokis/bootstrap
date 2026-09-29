@@ -33,3 +33,36 @@
     dest: "{{ ansible_facts.env.HOME }}/.bashrc.local"
     mode: "0600"
     force: false
+
+# nnn as default file manager: nnn-open runs the omb `n` function in an
+# interactive bash so desktop launches get the same flags and NNN_* env.
+- name: Ensure the local bin and applications directories exist
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: "0755"
+  loop:
+    - "{{ shell_local_bin }}"
+    - "{{ ansible_facts.env.HOME }}/.local/share/applications"
+
+- name: Deploy the nnn launcher
+  ansible.builtin.copy:
+    src: nnn-open
+    dest: "{{ shell_local_bin }}/nnn-open"
+    mode: "0755"
+
+- name: Deploy the nnn desktop entry
+  ansible.builtin.copy:
+    src: nnn.desktop
+    dest: "{{ ansible_facts.env.HOME }}/.local/share/applications/nnn.desktop"
+    mode: "0644"
+
+- name: Set nnn as the default file manager in mimeapps.list
+  community.general.ini_file:
+    path: "{{ ansible_facts.env.HOME }}/.config/mimeapps.list"
+    section: Default Applications
+    option: inode/directory
+    value: nnn.desktop
+    no_extra_spaces: true
+    create: true
+    mode: "0644"
