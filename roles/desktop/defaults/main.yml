@@ -15,6 +15,7 @@ desktop_packages:
     - scrot # screenshot + lockscreen snapshot
     - imagemagick # lockscreen blur (convert)
     - feh # wallpaper + default image viewer
+    - zathura # default PDF viewer
     - picom # compositor
     - libpam-gnome-keyring # unlock keyring (ssh keys, NM/wifi secrets) at tty login
     - xss-lock # lock on suspend / lock-session
@@ -45,3 +46,6 @@ desktop_image_mimes:
     - image/x-icon
     - image/x-xpixmap
     - image/x-xbitmap
+
+# Default PDF viewer in mimeapps.list.
+desktop_pdf_viewer: org.pwmt.zathura.desktop

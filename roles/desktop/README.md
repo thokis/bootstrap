@@ -17,6 +17,7 @@ Deploys:
 - CaskaydiaCove Nerd Font (`desktop_font_version`).
 - feh as default image viewer in `~/.config/mimeapps.list` (`desktop_image_viewer`
   / `desktop_image_mimes`), so `xdg-open` and nnn's Enter open images in feh.
+- zathura as default PDF viewer (`desktop_pdf_viewer`).
 
 `lockscreen` runs upstream xsecurelock (built by the `xsecurelock` role): plain
 black background + password prompt, no blurred backdrop.
