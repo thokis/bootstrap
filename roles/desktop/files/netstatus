@@ -12,8 +12,11 @@ fi
 for dev in $(ls /sys/class/net/ | grep '^en'); do
 	eip=$(ip -4 -o addr show dev "$dev" 2>/dev/null | awk '{print $4}' | cut -d/ -f1)
 	if [ -n "$eip" ]; then
-		[ -n "$out" ] && out="${out} "
-		out="${out} |   ${eip}"
+		if [ -n "$out" ]; then
+			out="${out}  |   ${eip}"
+		else
+			out="   ${eip}"
+		fi
 		break
 	fi
 done
