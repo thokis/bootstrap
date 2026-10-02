@@ -33,6 +33,7 @@ not the GUI. The `secrets` role needs OpenBao creds in the environment
 | [xsecurelock](roles/xsecurelock/README.md) | screen locker |
 | [shell](roles/shell/README.md) | bash env: oh-my-bash + managed dotfiles |
 | [desktop](roles/desktop/README.md) | X session glue: .xinitrc, dotfiles, scripts, fonts |
+| [tmux](roles/tmux/README.md) | tmux config + Alt-g Claude popup |
 
 To add a role, scaffold it with `ansible-galaxy role init roles/<area>`, list it
 in `site.yml`, and give it a short README. `pre-commit install` sets up linting

@@ -31,5 +31,7 @@
         tags: [shell]
       - role: desktop # X session glue: .xinitrc, dotfiles, scripts, fonts
         tags: [desktop, wm]
+      - role: tmux # tmux config + Alt-g Claude popup
+        tags: [tmux]
       # - role: <next>
       #   tags: <next>

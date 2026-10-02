@@ -1,0 +1,24 @@
+---
+- name: Install tmux and the clipboard helper
+  ansible.builtin.apt:
+    name: "{{ tmux_packages }}"
+    state: present
+  become: true
+
+- name: Ensure ~/.tmux exists
+  ansible.builtin.file:
+    path: "{{ ansible_facts.env.HOME }}/.tmux"
+    state: directory
+    mode: "0755"
+
+- name: Deploy .tmux.conf
+  ansible.builtin.copy:
+    src: tmux.conf
+    dest: "{{ ansible_facts.env.HOME }}/.tmux.conf"
+    mode: "0644"
+
+- name: Deploy the Alt-g popup script
+  ansible.builtin.copy:
+    src: popup.sh
+    dest: "{{ ansible_facts.env.HOME }}/.tmux/popup.sh"
+    mode: "0755"
