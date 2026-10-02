@@ -2,7 +2,7 @@
 galaxy_info:
     role_name: tmux
     author: Thomas Kiss
-    description: tmux with a per-session Claude scratch popup
+    description: tmux with per-session shell and Claude/Codex popups
     license: MIT
     min_ansible_version: "2.15"
     platforms:
