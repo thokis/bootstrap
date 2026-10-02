@@ -13,7 +13,8 @@ Deploys:
 - `/etc/X11/xorg.conf.d/40-libinput-touchpad.conf` (tap-to-click, natural
   scroll).
 - Helper scripts to `~/.local/bin`: `lockscreen`, `idle-manager`, `netstatus`,
-  `google-chrome` (scales Chrome to 0.9), `screenshot`.
+  `google-chrome` (scales Chrome to 0.9), `screenshot-fullscreen`,
+  `screenshot-selection`, `screenshot-window`.
 - CaskaydiaCove Nerd Font (`desktop_font_version`).
 - feh as default image viewer in `~/.config/mimeapps.list` (`desktop_image_viewer`
   / `desktop_image_mimes`), so `xdg-open` and nnn's Enter open images in feh.

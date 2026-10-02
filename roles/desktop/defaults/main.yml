@@ -13,6 +13,8 @@ desktop_font_dir: "{{ ansible_facts.env.HOME }}/.local/share/fonts/CascadiaCode"
 desktop_packages:
     - unzip # extract the font archive
     - scrot # screenshot + lockscreen snapshot
+    - xdotool # screenshot-fullscreen pointer position
+    - xclip # screenshots to clipboard
     - imagemagick # lockscreen blur (convert)
     - feh # wallpaper + default image viewer
     - zathura # default PDF viewer
@@ -32,7 +34,9 @@ desktop_scripts:
     - idle-manager
     - netstatus
     - google-chrome
-    - screenshot
+    - screenshot-fullscreen
+    - screenshot-selection
+    - screenshot-window
 
 # Default image viewer in mimeapps.list (xdg-open, so nnn's Enter too).
 desktop_image_viewer: feh.desktop

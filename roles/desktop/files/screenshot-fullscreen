@@ -1,0 +1,11 @@
+#!/bin/bash
+
+out=~/Pictures/Screenshots/%Y-%m-%d-%H%M%S.png
+copy='xclip -selection clipboard -t image/png -i $f'
+
+# monitor under the mouse pointer
+eval "$(xdotool getmouselocation --shell)"
+mon=$(xrandr --listactivemonitors | awk -v x="$X" -v y="$Y" -F'[ /x+:]+' 'NR>1 {
+  if (x >= $8 && x < $8 + $4 && y >= $9 && y < $9 + $6) { print $2; exit } }')
+
+exec scrot -M "${mon:-0}" "$out" -e "$copy"
