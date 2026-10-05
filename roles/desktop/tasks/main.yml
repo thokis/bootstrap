@@ -131,17 +131,24 @@
       insertafter: "^@include common-session"
   become: true
 
-# Use the plain OpenSSH agent for ssh, not gcr-ssh-agent: the gcr agent needs a
-# prompter to unlock/confirm keys, which isn't running under dwm, so it refuses
-# to sign ("agent refused operation"). Disable its socket so it can't reclaim
-# $SSH_AUTH_SOCK, and let ssh load keys into the agent on first use.
-- name: Disable the gcr ssh-agent socket (we use the plain OpenSSH agent)
+# gcr-ssh-agent needs a prompter dwm lacks; mask it, since disable can't undo the global /etc enablement.
+- name: Mask the gcr ssh-agent socket
   ansible.builtin.systemd_service:
       name: gcr-ssh-agent.socket
       scope: user
-      enabled: false
+      masked: true
       state: stopped
-  failed_when: false
+
+# agent-launch no-ops while the user manager still carries gcr's SSH_AUTH_SOCK.
+- name: Drop the stale gcr SSH_AUTH_SOCK from the user manager
+  ansible.builtin.shell: systemctl --user show-environment | grep -q '^SSH_AUTH_SOCK=.*/gcr/' && systemctl --user unset-environment SSH_AUTH_SOCK || true
+  changed_when: false
+
+- name: Start the OpenSSH agent
+  ansible.builtin.systemd_service:
+      name: ssh-agent.service
+      scope: user
+      state: started
 
 - name: Load ssh keys into the agent on first use
   ansible.builtin.blockinfile:
@@ -151,5 +158,7 @@
       insertbefore: BOF
       marker: "# {mark} ANSIBLE MANAGED: ssh-agent"
       block: |
+          # Forwarded agents need the GitLab key on the stations.
+          Match host *.local,*.lemonbeat.com,192.168.10.* exec "ssh-add -q ~/.ssh/lemonbeat 2>/dev/null; true"
           Host *
               AddKeysToAgent yes
