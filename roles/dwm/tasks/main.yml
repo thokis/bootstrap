@@ -17,11 +17,13 @@
     version: "{{ dwm_version }}"
   when: not dwm_src_git.stat.exists
 
-- name: Apply the pertag + grid patch
+- name: Apply the vendored patches
   ansible.posix.patch:
-    src: "{{ dwm_patch }}"
+    src: "{{ item }}"
     basedir: "{{ dwm_src }}"
     strip: 1
+  loop: "{{ dwm_patches }}"
+  register: dwm_patch_result
 
 - name: Deploy config.h
   ansible.builtin.copy:
@@ -39,11 +41,11 @@
   community.general.make:
     chdir: "{{ dwm_src }}"
     target: all
-  when: dwm_config.changed or not dwm_binary.stat.exists
+  when: dwm_config.changed or dwm_patch_result.changed or not dwm_binary.stat.exists
 
 - name: Install dwm
   community.general.make:
     chdir: "{{ dwm_src }}"
     target: install
   become: true
-  when: dwm_config.changed or not dwm_binary.stat.exists
+  when: dwm_config.changed or dwm_patch_result.changed or not dwm_binary.stat.exists
