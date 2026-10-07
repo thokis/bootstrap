@@ -6,9 +6,8 @@
       update_cache: true
   become: true
 
-# What `systemctl set-default {{ system_boot_target }}` does, as an idempotent
-# symlink: boot to a text console so the display manager never starts.
-- name: Boot to the multi-user target
+# What `systemctl set-default {{ system_boot_target }}` does, as an idempotent symlink.
+- name: Set the default boot target
   ansible.builtin.file:
       src: "/usr/lib/systemd/system/{{ system_boot_target }}"
       dest: /etc/systemd/system/default.target

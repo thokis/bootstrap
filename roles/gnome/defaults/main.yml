@@ -1,0 +1,53 @@
+---
+# Stock Ubuntu GNOME session: GDM, the keyring (Secret Service, unlocked at GDM
+# login) and gcr-ssh-agent. Already present on an Ubuntu desktop install.
+gnome_packages:
+  - ubuntu-desktop-minimal
+  - gnome-keyring
+  - libpam-gnome-keyring
+  - gcr4
+  - xdg-desktop-portal-gnome
+  - python3-gi # dconf module
+
+gnome_remove_packages:
+  - picom
+
+# Leftovers of the former startx + dwm session that would interfere with GNOME
+# (forced GTK portal, Chrome 0.9 scale wrapper shadowing /usr/bin, Xft.dpi 96).
+gnome_dwm_leftovers:
+  - "{{ ansible_facts.env.HOME }}/.xinitrc"
+  - "{{ ansible_facts.env.HOME }}/.Xresources"
+  - "{{ ansible_facts.env.HOME }}/.config/picom.conf"
+  - "{{ ansible_facts.env.HOME }}/.config/xdg-desktop-portal/portals.conf"
+  - "{{ ansible_facts.env.HOME }}/.icons/default/index.theme"
+  - "{{ ansible_facts.env.HOME }}/.local/bin/google-chrome"
+  - "{{ ansible_facts.env.HOME }}/.local/bin/lockscreen"
+  - "{{ ansible_facts.env.HOME }}/.local/bin/idle-manager"
+  - "{{ ansible_facts.env.HOME }}/.local/bin/netstatus"
+  - "{{ ansible_facts.env.HOME }}/.local/bin/screenshot-fullscreen"
+  - "{{ ansible_facts.env.HOME }}/.local/bin/screenshot-selection"
+  - "{{ ansible_facts.env.HOME }}/.local/bin/screenshot-window"
+
+# mimeapps.list defaults the desktop role pointed at feh/zathura; dropping them
+# lets GNOME's own viewers (Image Viewer, Document Viewer) take over.
+gnome_dwm_mime_defaults:
+  - image/jpeg
+  - image/png
+  - image/gif
+  - image/tiff
+  - image/bmp
+  - image/webp
+  - image/x-icon
+  - image/x-xpixmap
+  - image/x-xbitmap
+  - application/pdf
+
+gnome_dwm_leftovers_system:
+  - /etc/X11/xorg.conf.d/40-libinput-touchpad.conf
+
+# GVariant values written with dconf.
+gnome_settings:
+  - {key: /org/gnome/desktop/input-sources/sources, value: "[('xkb', '{{ keyboard_layout }}')]"}
+  - {key: /org/gnome/desktop/peripherals/touchpad/tap-to-click, value: "true"}
+  - {key: /org/gnome/desktop/peripherals/touchpad/natural-scroll, value: "true"}
+  - {key: /org/gnome/mutter/experimental-features, value: "['scale-monitor-framebuffer']"}

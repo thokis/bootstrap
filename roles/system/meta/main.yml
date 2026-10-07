@@ -2,7 +2,7 @@
 galaxy_info:
     role_name: system
     author: Thomas Kiss
-    description: Boot to a plain text console with no display manager (for startx + dwm)
+    description: Base packages, boot target, console keymap and verbose boot
     license: MIT
     min_ansible_version: "2.15"
     platforms:

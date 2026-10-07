@@ -1,5 +1,0 @@
-#!/bin/sh
-# --force-device-scale-factor: shrink Chrome UI to match the fixed-pixel dwm/st/dmenu sizing
-exec /usr/bin/google-chrome \
-  --force-device-scale-factor=0.9 \
-  "$@"

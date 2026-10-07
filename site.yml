@@ -3,8 +3,8 @@
   hosts: all
   gather_facts: true
   roles:
-      - role: system # bootstrap first: base packages (git, …), console boot. Run from a tty/SSH, not the GUI.
-        tags: [system, wm, bootstrap]
+      - role: system # bootstrap first: base packages (git, …), boot target
+        tags: [system, bootstrap]
       - role: uv # uv Python tool manager
         tags: [uv, bootstrap]
       - role: secrets # install the GitHub SSH key from OpenBao before any clone
@@ -15,22 +15,10 @@
         tags: [pyenv]
       - role: neovim # neovim from source + config; default editor
         tags: neovim
-      - role: xorg # X server + xinit (modesetting; AMD/Intel auto)
-        tags: [xorg, wm]
-      - role: dwm # tiling window manager (upstream + vendored patch)
-        tags: [dwm, wm]
-      - role: st # terminal (upstream + vendored patch)
-        tags: [st, wm]
-      - role: dmenu # launcher (upstream, stock)
-        tags: [dmenu, wm]
-      - role: slstatus # status bar (upstream; templated config.h)
-        tags: [slstatus, wm]
-      - role: xsecurelock # screen locker (upstream; plain black + prompt)
-        tags: [xsecurelock, wm]
       - role: shell # bash env: oh-my-bash + managed .bashrc/.profile
         tags: [shell]
-      - role: desktop # X session glue: .xinitrc, dotfiles, scripts, fonts
-        tags: [desktop, wm]
+      - role: gnome # stock GNOME session: GDM, keyring, ssh agent; dwm cleanup
+        tags: [gnome]
       - role: tmux # tmux config + Alt-g Claude popup
         tags: [tmux]
       # - role: <next>

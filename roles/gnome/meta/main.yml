@@ -1,8 +1,8 @@
 ---
 galaxy_info:
-  role_name: xsecurelock
+  role_name: gnome
   author: Thomas Kiss
-  description: Build and install the personal xsecurelock fork from source
+  description: Stock Ubuntu GNOME session (GDM, keyring, ssh agent) + cleanup of the former dwm session
   license: MIT
   min_ansible_version: "2.15"
   platforms:

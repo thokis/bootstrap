@@ -1,6 +1,0 @@
-#!/bin/sh
-# xdg-terminal-exec -> st. glib's terminal picker (Ctrl+Alt+T, every Terminal=true
-# .desktop launch, e.g. opening a text file in nvim) tries this on $PATH first.
-# st needs -e to run a command; with no args it just opens a shell.
-[ "$#" -eq 0 ] && exec st
-exec st -e "$@"

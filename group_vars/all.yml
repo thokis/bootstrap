@@ -1,5 +1,5 @@
 ---
-# Keyboard layout for both the tty console (login) and the X/dwm session.
+# Keyboard layout for both the tty console (LUKS prompt, login) and GNOME.
 # Physical keyboards can't be auto-detected, so declare this per machine: give
 # each host a stable inventory name and set it in host_vars/<host>.yml (NOT
 # host_vars/localhost.yml — "localhost" matches whatever box you run on). This

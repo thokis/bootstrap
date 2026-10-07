@@ -1,0 +1,100 @@
+---
+- name: Install the GNOME session packages
+  ansible.builtin.apt:
+    name: "{{ gnome_packages }}"
+    state: present
+  become: true
+
+- name: Remove dwm-session packages
+  ansible.builtin.apt:
+    name: "{{ gnome_remove_packages }}"
+    state: absent
+  become: true
+
+# graphical.target only Wants display-manager.service; gdm3 is a static unit, so
+# this alias (normally made by gdm3's postinst) is what actually starts GDM.
+- name: Select GDM as the display manager
+  ansible.builtin.file:
+    src: /usr/lib/systemd/system/gdm3.service
+    dest: /etc/systemd/system/display-manager.service
+    state: link
+  become: true
+
+- name: Enable the Wayland session in GDM
+  community.general.ini_file:
+    path: /etc/gdm3/custom.conf
+    section: daemon
+    option: WaylandEnable
+    value: "true"
+    no_extra_spaces: true
+    mode: "0644"
+  become: true
+
+# GDM's own PAM stack (gdm-password) unlocks the keyring; the tty hooks the dwm
+# session needed would start a stray keyring daemon on every tty/console login.
+- name: Drop the tty-login gnome-keyring PAM hooks
+  ansible.builtin.lineinfile:
+    path: /etc/pam.d/login
+    regexp: '^(auth|session)\s+optional\s+pam_gnome_keyring\.so'
+    state: absent
+  become: true
+
+# Stock noble: gnome-keyring's ssh component (autostart) sets SSH_AUTH_SOCK to
+# keyring/ssh, with GNOME Shell as the unlock prompter. The dwm setup masked the
+# gcr agent socket per user; unmask it to restore the stock state.
+- name: Unmask the gcr ssh-agent socket
+  ansible.builtin.systemd_service:
+    name: gcr-ssh-agent.socket
+    scope: user
+    masked: false
+    enabled: true
+
+- name: Ensure ~/.ssh exists
+  ansible.builtin.file:
+    path: "{{ ansible_facts.env.HOME }}/.ssh"
+    state: directory
+    mode: "0700"
+
+- name: Add keys to the ssh-agent on first use
+  ansible.builtin.blockinfile:
+    path: "{{ ansible_facts.env.HOME }}/.ssh/config"
+    create: true
+    mode: "0600"
+    insertbefore: BOF
+    marker: "# {mark} ANSIBLE MANAGED: ssh-agent"
+    block: |
+      # Forwarded agents need the GitLab key on the stations.
+      Match host *.local,*.lemonbeat.com,192.168.10.* exec "ssh-add -q ~/.ssh/lemonbeat 2>/dev/null; true"
+      Host *
+          AddKeysToAgent yes
+
+- name: Remove dwm-session leftovers
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  loop: "{{ gnome_dwm_leftovers }}"
+
+- name: Drop the feh/zathura mime defaults
+  community.general.ini_file:
+    path: "{{ ansible_facts.env.HOME }}/.config/mimeapps.list"
+    section: Default Applications
+    option: "{{ item }}"
+    state: absent
+    mode: "0644"
+  loop: "{{ gnome_dwm_mime_defaults }}"
+
+- name: Remove dwm-session system leftovers
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  loop: "{{ gnome_dwm_leftovers_system }}"
+  become: true
+
+- name: Apply GNOME settings
+  community.general.dconf:
+    key: "{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+  loop: "{{ gnome_settings }}"
+  loop_control:
+    label: "{{ item.key }}"

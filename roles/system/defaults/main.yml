@@ -10,9 +10,8 @@ system_base_packages:
     - pkg-config
     - unzip
 
-# Default systemd target. multi-user is text-console only, so the display
-# manager (only wanted by graphical.target) never starts on boot.
-system_boot_target: multi-user.target
+# Default systemd target. graphical.target starts GDM (the gnome role's session).
+system_boot_target: graphical.target
 
 # Kernel cmdline tokens to strip from GRUB_CMDLINE_LINUX_DEFAULT for a plain
 # text boot (no vendor splash, kernel messages visible).
