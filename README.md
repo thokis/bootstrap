@@ -25,6 +25,7 @@ OpenBao creds in the environment (`source scripts/load-creds.sh`); see [its READ
 | [neovim](roles/neovim/README.md) | neovim from source + config; default editor |
 | [shell](roles/shell/README.md) | bash env: oh-my-bash + managed dotfiles |
 | [gnome](roles/gnome/README.md) | stock GNOME session: GDM, keyring, ssh agent; dwm cleanup |
+| [terminal](roles/terminal/README.md) | ghostty as the default terminal + Nerd Font |
 | [tmux](roles/tmux/README.md) | tmux config + Alt-g Claude popup |
 
 To add a role, scaffold it with `ansible-galaxy role init roles/<area>`, list it

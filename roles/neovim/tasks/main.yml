@@ -62,7 +62,7 @@
   become: true
 
 # nvim.desktop is Terminal=true, so opening a text file is hosted by whatever the
-# st role's xdg-terminal-exec keystone resolves (st).
+# terminal role's xdg-terminal-exec keystone resolves (ghostty).
 - name: Set default text editor in mimeapps.list
   community.general.ini_file:
     path: "{{ ansible_facts.env.HOME }}/.config/mimeapps.list"

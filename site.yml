@@ -19,6 +19,8 @@
         tags: [shell]
       - role: gnome # stock GNOME session: GDM, keyring, ssh agent; dwm cleanup
         tags: [gnome]
+      - role: terminal # ghostty as the default terminal + Nerd Font
+        tags: [terminal]
       - role: tmux # tmux config + Alt-g Claude popup
         tags: [tmux]
       # - role: <next>

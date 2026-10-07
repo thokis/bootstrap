@@ -17,7 +17,7 @@ creates it empty once and never overwrites it.
 > `~/.bashrc.local` first, or they're lost.
 
 Default file manager: deploys `nnn.desktop` (`Terminal=true`, so it opens in
-st) and sets it for `inode/directory`. It launches `~/.local/bin/nnn-open`,
+ghostty) and sets it for `inode/directory`. It launches `~/.local/bin/nnn-open`,
 which runs the `n` function in an interactive bash to get the same flags and
 `NNN_*` env as typing `n`.
 

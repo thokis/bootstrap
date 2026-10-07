@@ -1,0 +1,116 @@
+---
+- name: Check that ghostty is installed
+  ansible.builtin.stat:
+    path: "{{ terminal_ghostty_bin }}"
+  register: terminal_ghostty
+
+- name: Fail if ghostty is missing
+  ansible.builtin.assert:
+    that: terminal_ghostty.stat.exists
+    fail_msg: "{{ terminal_ghostty_bin }} not found; install the ghostty .deb first"
+
+# Keystone: glib/GNOME launches this for Ctrl+Alt+T and every Terminal=true app
+# (e.g. nvim opening a text file). Without it they fall back to gnome-terminal.
+- name: Shim xdg-terminal-exec to ghostty
+  ansible.builtin.file:
+    src: "{{ terminal_ghostty_bin }}"
+    dest: "{{ ansible_facts.env.HOME }}/.local/bin/xdg-terminal-exec"
+    state: link
+    force: true
+
+- name: Pin x-terminal-emulator alternative to ghostty
+  community.general.alternatives:
+    name: x-terminal-emulator
+    path: "{{ terminal_ghostty_bin }}"
+  become: true
+
+- name: Query the x-terminal-emulator alternatives
+  ansible.builtin.command:
+    cmd: update-alternatives --query x-terminal-emulator
+  register: terminal_alternatives
+  changed_when: false
+  check_mode: false
+  failed_when: false
+
+# Left over from the former st role.
+- name: Drop the st x-terminal-emulator alternative
+  community.general.alternatives:
+    name: x-terminal-emulator
+    path: /usr/local/bin/st
+    state: absent
+  become: true
+  when: "'Alternative: /usr/local/bin/st' in terminal_alternatives.stdout"
+
+- name: Install packages
+  ansible.builtin.apt:
+    name: "{{ terminal_install_packages }}"
+    state: present
+  become: true
+
+- name: Remove gnome-terminal and xterm
+  ansible.builtin.apt:
+    name: "{{ terminal_remove_packages }}"
+    state: absent
+    purge: true
+  become: true
+
+- name: Set default terminal handlers in mimeapps.list
+  community.general.ini_file:
+    path: "{{ ansible_facts.env.HOME }}/.config/mimeapps.list"
+    section: Default Applications
+    option: "{{ item.mime }}"
+    value: "{{ item.app }}"
+    no_extra_spaces: true
+    create: true
+    mode: "0644"
+  loop: "{{ terminal_default_apps }}"
+
+# gsd-media-keys still reads this for Ctrl+Alt+T before falling back to the shim.
+- name: Set ghostty as the GNOME default terminal
+  community.general.dconf:
+    key: "{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+  loop:
+    - {key: /org/gnome/desktop/default-applications/terminal/exec, value: "'ghostty'"}
+    - {key: /org/gnome/desktop/default-applications/terminal/exec-arg, value: "'-e'"}
+
+- name: Register custom keybinding list
+  community.general.dconf:
+    key: "{{ terminal_keybinding_base }}"
+    value: >-
+      {{ terminal_keybindings | map(attribute='id')
+         | map('regex_replace', '^(.+)$', terminal_keybinding_base ~ '/\g<1>/')
+         | list }}
+
+- name: Set custom keybinding names
+  community.general.dconf:
+    key: "{{ terminal_keybinding_base }}/{{ item.id }}/name"
+    value: "'{{ item.name }}'"
+  loop: "{{ terminal_keybindings }}"
+
+- name: Set custom keybinding commands
+  community.general.dconf:
+    key: "{{ terminal_keybinding_base }}/{{ item.id }}/command"
+    value: "'{{ item.command }}'"
+  loop: "{{ terminal_keybindings }}"
+
+- name: Set custom keybinding bindings
+  community.general.dconf:
+    key: "{{ terminal_keybinding_base }}/{{ item.id }}/binding"
+    value: "'{{ item.binding }}'"
+  loop: "{{ terminal_keybindings }}"
+
+- name: Ensure the font directory exists
+  ansible.builtin.file:
+    path: "{{ terminal_font_dir }}"
+    state: directory
+    mode: "0755"
+
+- name: Install the CaskaydiaCove Nerd Font
+  ansible.builtin.unarchive:
+    src: "{{ terminal_font_url }}"
+    dest: "{{ terminal_font_dir }}"
+    remote_src: true
+    creates: "{{ terminal_font_dir }}/CaskaydiaCoveNerdFont-Regular.ttf"
+  notify: Rebuild font cache

@@ -1,0 +1,26 @@
+---
+terminal_ghostty_bin: /usr/bin/ghostty
+
+terminal_install_packages:
+  - python3-nautilus
+  - unzip # extract the font archive
+
+terminal_remove_packages:
+  - gnome-terminal
+  - nautilus-extension-gnome-terminal
+  - xterm
+
+terminal_default_apps:
+  - {mime: x-scheme-handler/terminal, app: com.mitchellh.ghostty.desktop}
+  - {mime: application/x-terminal-emulator, app: com.mitchellh.ghostty.desktop}
+
+terminal_keybinding_base: /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings
+
+terminal_keybindings:
+  - {id: custom0, name: Terminal, command: ghostty, binding: <Super>Return}
+  - {id: custom1, name: Terminal, command: ghostty -e tmux, binding: <Shift><Super>Return}
+
+# CaskaydiaCove Nerd Font (ghostty font-family; nvim icons).
+terminal_font_version: v3.5.1
+terminal_font_url: "https://github.com/ryanoasis/nerd-fonts/releases/download/{{ terminal_font_version }}/CascadiaCode.zip"
+terminal_font_dir: "{{ ansible_facts.env.HOME }}/.local/share/fonts/CascadiaCode"

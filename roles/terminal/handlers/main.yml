@@ -1,0 +1,5 @@
+---
+- name: Rebuild font cache
+  ansible.builtin.command:
+    cmd: fc-cache -f
+  changed_when: true
